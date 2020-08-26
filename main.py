@@ -23,12 +23,12 @@ spaceship = sprites.create(img("""
 """))
 spaceship.set_position(10, scene.screen_height()/2)
 spaceship.set_flag(SpriteFlag.StayInScreen, True)
+spaceship.set_kind(SpriteKind.player)
 
 # set player controls
 controller.move_sprite(spaceship, 200, 200)
 
 # setup enemies
-
 def on_update_interval():
     meteor = sprites.create(img("""
     . . . . . . . . . c c 8 . . . .
@@ -50,6 +50,7 @@ def on_update_interval():
     """))
     meteor.set_position(scene.screen_width(), randint(0, scene.screen_height()))
     meteor.set_velocity(-50, 0)
+    meteor.set_kind(SpriteKind.enemy)
 game.on_update_interval(750, on_update_interval)
 
 # set projectiles for player
@@ -72,11 +73,18 @@ def on_event_pressed():
     . . . . . . . . . . . . . . . .
     . . . . . . . . . . . . . . . .
     """), spaceship, 50, 0)
+    projectile.set_kind(SpriteKind.projectile)
 controller.A.on_event(ControllerButtonEvent.PRESSED, on_event_pressed)
 
 # lose life when hit
 def on_overlap(sprite, otherSprite):
-    pass
-sprites.on_overlap(SpriteKind.player, SpriteKind.player, on_overlap)
+    otherSprite.destroy()
+    info.change_life_by(-1)
+sprites.on_overlap(SpriteKind.player, SpriteKind.enemy, on_overlap)
 
 # destroy meteor when hit
+def on_meteor_hit(sprite, otherSprite):
+    sprite.destroy()
+    otherSprite.destroy(effects.fire, 100)
+    info.change_score_by(1)
+sprites.on_overlap(SpriteKind.projectile, SpriteKind.enemy, on_meteor_hit)

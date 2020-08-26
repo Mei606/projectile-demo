@@ -22,6 +22,7 @@ let spaceship = sprites.create(img`
 `)
 spaceship.setPosition(10, scene.screenHeight() / 2)
 spaceship.setFlag(SpriteFlag.StayInScreen, true)
+spaceship.setKind(SpriteKind.Player)
 //  set player controls
 controller.moveSprite(spaceship, 200, 200)
 //  setup enemies
@@ -46,6 +47,7 @@ game.onUpdateInterval(750, function on_update_interval() {
     `)
     meteor.setPosition(scene.screenWidth(), randint(0, scene.screenHeight()))
     meteor.setVelocity(-50, 0)
+    meteor.setKind(SpriteKind.Enemy)
 })
 //  set projectiles for player
 controller.A.onEvent(ControllerButtonEvent.Pressed, function on_event_pressed() {
@@ -67,8 +69,16 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function on_event_pressed() 
     . . . . . . . . . . . . . . . .
     . . . . . . . . . . . . . . . .
     `, spaceship, 50, 0)
+    projectile.setKind(SpriteKind.Projectile)
 })
 //  lose life when hit
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Player, function on_overlap(sprite: Sprite, otherSprite: Sprite) {
-    
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function on_overlap(sprite: Sprite, otherSprite: Sprite) {
+    otherSprite.destroy()
+    info.changeLifeBy(-1)
+})
+//  destroy meteor when hit
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function on_meteor_hit(sprite: Sprite, otherSprite: Sprite) {
+    sprite.destroy()
+    otherSprite.destroy(effects.fire, 100)
+    info.changeScoreBy(1)
 })
