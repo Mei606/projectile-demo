@@ -47,3 +47,28 @@ game.onUpdateInterval(750, function on_update_interval() {
     meteor.setPosition(scene.screenWidth(), randint(0, scene.screenHeight()))
     meteor.setVelocity(-50, 0)
 })
+//  set projectiles for player
+controller.A.onEvent(ControllerButtonEvent.Pressed, function on_event_pressed() {
+    let projectile = sprites.createProjectileFromSprite(img`
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . 5 5 5 . . . . . . .
+    . . . . . 5 5 4 4 . . . . . . .
+    . . 5 . 5 5 4 4 2 2 . . . . . .
+    . . . 5 5 5 4 2 2 2 . . . . . .
+    . . . . . 5 4 4 2 2 . . . . . .
+    . . . . . . 5 4 4 . . . . . . .
+    . . . . . . . 5 5 . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    `, spaceship, 50, 0)
+})
+//  lose life when hit
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Player, function on_overlap(sprite: Sprite, otherSprite: Sprite) {
+    
+})

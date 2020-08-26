@@ -29,7 +29,6 @@ controller.move_sprite(spaceship, 200, 200)
 
 # setup enemies
 
-
 def on_update_interval():
     meteor = sprites.create(img("""
     . . . . . . . . . c c 8 . . . .
@@ -54,3 +53,30 @@ def on_update_interval():
 game.on_update_interval(750, on_update_interval)
 
 # set projectiles for player
+def on_event_pressed():
+    projectile = sprites.create_projectile_from_sprite(img("""
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . 5 5 5 . . . . . . .
+    . . . . . 5 5 4 4 . . . . . . .
+    . . 5 . 5 5 4 4 2 2 . . . . . .
+    . . . 5 5 5 4 2 2 2 . . . . . .
+    . . . . . 5 4 4 2 2 . . . . . .
+    . . . . . . 5 4 4 . . . . . . .
+    . . . . . . . 5 5 . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    . . . . . . . . . . . . . . . .
+    """), spaceship, 50, 0)
+controller.A.on_event(ControllerButtonEvent.PRESSED, on_event_pressed)
+
+# lose life when hit
+def on_overlap(sprite, otherSprite):
+    pass
+sprites.on_overlap(SpriteKind.player, SpriteKind.player, on_overlap)
+
+# destroy meteor when hit
