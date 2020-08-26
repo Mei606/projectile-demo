@@ -87,4 +87,5 @@ def on_meteor_hit(sprite, otherSprite):
     sprite.destroy()
     otherSprite.destroy(effects.fire, 100)
     info.change_score_by(1)
+    
 sprites.on_overlap(SpriteKind.projectile, SpriteKind.enemy, on_meteor_hit)
